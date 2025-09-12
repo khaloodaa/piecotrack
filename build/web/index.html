@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <base href="/piecotrack/">
+  <base href="/">
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+  <meta name="description" content="Piecotrack - Eco Activities Tracker">
 
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -14,22 +14,26 @@
 
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>piecotrack</title>
+  <title>Piecotrack</title>
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
+<!-- Pi SDK -->
 <script src="https://sdk.minepi.com/pi-sdk.js"></script>
 
 <script>
   window.addEventListener('load', function() {
     if (typeof window.Pi !== 'undefined') {
-      console.log('Pi SDK loaded successfully.');
+      console.log('✅ Pi SDK loaded successfully.');
+      // تقدر تضيف test سريع هنا
+      // window.Pi.authenticate(["username"], (res) => console.log("Auth success", res), (err) => console.error("Auth error", err));
     } else {
-      console.error('Pi SDK is not loaded correctly.');
+      console.error('❌ Pi SDK is not loaded correctly.');
     }
   });
 </script>
 
+<!-- Flutter app -->
 <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>
