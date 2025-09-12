@@ -27,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppColors.primaryBlue, Colors.white],
+            colors: [AppColors.accentGreen, Colors.white],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -43,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
               ).animate().scale(duration: 1000.ms).fadeIn(duration: 800.ms),
               SizedBox(height: 20.h),
               Text(
-                'Pi EcoTrack',
+                ' EcoTrack',
                 style: TextStyle(
                   fontSize: AppSizes.fontSizeTitle,
                   fontWeight: FontWeight.bold,
