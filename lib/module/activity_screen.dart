@@ -2,12 +2,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import '../layout/cubit/cubit.dart';
-import '../layout/cubit/states.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'dart:js' as js; // رجعنا للمكتبة الأقدم والأكثر موثوقية
+import 'package:js/js.dart';
+
+import '../layout/cubit/cubit.dart';
+import '../layout/cubit/states.dart';
 import '../model/model_screen.dart';
+
+@JS()
+external dynamic get Pi;
 
 class ActivityScreen extends StatefulWidget {
   const ActivityScreen({Key? key}) : super(key: key);
@@ -17,6 +21,7 @@ class ActivityScreen extends StatefulWidget {
 }
 
 class _ActivityScreenState extends State<ActivityScreen> {
+
   @override
   void initState() {
     super.initState();
@@ -26,19 +31,16 @@ class _ActivityScreenState extends State<ActivityScreen> {
   Future<void> _initiatePiAuth() async {
     if (kIsWeb) {
       try {
-        // This is the code that works reliably.
-        js.context.callMethod('Pi.authenticate', [
-          ['username', 'walletAddress'], // Pass permissions as a simple list
-              (js.JsObject authResult) {
-            // Success callback
+        Pi.authenticate(
+          ['username', 'walletAddress'],
+          allowInterop((authResult) {
             print('Pi Auth Success:');
             // TODO: Use the authenticated user data to load their activities
-          },
-              (js.JsObject error) {
-            // Error callback
+          }),
+          allowInterop((error) {
             print('Pi Auth Error: ${error['name']} - ${error['message']}');
-          }
-        ]);
+          }),
+        );
       } catch (e) {
         print('Error calling Pi.authenticate: $e');
       }
@@ -112,7 +114,9 @@ class _ActivityScreenState extends State<ActivityScreen> {
                         color: Colors.teal,
                       ),
                     ).animate().fadeIn(duration: 400.ms),
+
                     const SizedBox(height: 8),
+
                     Column(
                       children: entry.value.map((activity) {
                         return Card(
