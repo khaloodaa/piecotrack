@@ -43,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
               ).animate().scale(duration: 1000.ms).fadeIn(duration: 800.ms),
               SizedBox(height: 20.h),
               Text(
-                ' EcoTrack',
+                ' EcoTrack pi',
                 style: TextStyle(
                   fontSize: AppSizes.fontSizeTitle,
                   fontWeight: FontWeight.bold,
