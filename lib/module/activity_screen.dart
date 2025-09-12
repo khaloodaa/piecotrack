@@ -66,7 +66,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("My Activities"),
+        title: const Text(" Activities"),
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
