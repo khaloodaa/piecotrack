@@ -30,6 +30,7 @@ class PiEcoTrackApp extends StatelessWidget {
         splitScreenMode: true,
         builder: (context, child) {
           return MaterialApp(
+            debugShowCheckedModeBanner: false,
             title: 'Pi EcoTrack',
             theme: ThemeData(
               primaryColor: AppColors.primaryBlue,
