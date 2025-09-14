@@ -5,16 +5,16 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="Piecotrack - Eco Activities Tracker">
+  <meta name="description" content="EcoTrack - Track your eco-friendly activities and earn Pi rewards.">
 
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="piecotrack">
+  <meta name="apple-mobile-web-app-title" content="EcoTrack">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>Piecotrack</title>
+  <title>EcoTrack</title>
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
@@ -22,18 +22,24 @@
 <script src="https://sdk.minepi.com/pi-sdk.js"></script>
 
 <script>
-  window.addEventListener('load', function() {
-    if (typeof window.Pi !== 'undefined') {
-      console.log('✅ Pi SDK loaded successfully.');
-      // تقدر تضيف test سريع هنا
-      // window.Pi.authenticate(["username"], (res) => console.log("Auth success", res), (err) => console.error("Auth error", err));
+  // Initialize Pi SDK in sandbox mode
+  document.addEventListener("DOMContentLoaded", function () {
+    if (typeof window.Pi !== "undefined") {
+      console.log("✅ Pi SDK loaded successfully.");
+
+      Pi.init({
+        version: "2.0",   // Always use latest SDK version
+        sandbox: true     // Sandbox mode for development
+      });
+
+      console.log("🚀 Pi SDK initialized in sandbox mode.");
     } else {
-      console.error('❌ Pi SDK is not loaded correctly.');
+      console.error("❌ Pi SDK is not loaded correctly.");
     }
   });
 </script>
 
-<!-- Flutter app -->
+<!-- Flutter entry point -->
 <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

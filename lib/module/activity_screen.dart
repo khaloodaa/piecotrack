@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:js/js.dart';
+import 'package:piecotrack/shared/component/component.dart';
 
 import '../layout/cubit/cubit.dart';
 import '../layout/cubit/states.dart';
@@ -40,12 +41,17 @@ class _ActivityScreenState extends State<ActivityScreen> {
                 _isAuthenticated = true;
                 _username = authResult['user']['username'];
               });
+              print(authResult);
+              print('authResult');
             }),
             allowInterop((error) {
               print('❌ Pi Auth Error: ${error['name']} - ${error['message']}');
             }),
-            "worksphere-414140d105c524a8" // ← App ID بتاعك
+            // https://sandbox.minepi.com/app/ecotrack-b612674e74f4c762
+            "ecotrack-b612674e74f4c762" // ← App ID بتاعك
         );
+        showToast(text: _username, state: ToastStates.success);
+        showToast(text: '_username', state: ToastStates.error);
       } catch (e) {
         print('⚠️ Error calling Pi.authenticate: $e');
       }
@@ -89,7 +95,6 @@ class _ActivityScreenState extends State<ActivityScreen> {
       ),
       body: Column(
         children: [
-          if (!_isAuthenticated)
             Container(
               color: Colors.red.shade100,
               padding: const EdgeInsets.all(12),
@@ -108,7 +113,6 @@ class _ActivityScreenState extends State<ActivityScreen> {
                 ],
               ),
             ),
-          if (_isAuthenticated)
             Expanded(
               child: BlocBuilder<ActivityCubit, ActivityState>(
                 builder: (context, state) {
