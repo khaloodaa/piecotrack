@@ -1,96 +1,99 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import '../shared/component/contasnt.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+  const ProfileScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Mock data
-    final String userName = "Khaled Elroby";
-    final int totalActivities = 5;
-    final List<String> badges = ["Eco Beginner", "Walker", "Recycler"];
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("Profile"),
-        flexibleSpace: Container(
 
-          decoration: const BoxDecoration(
-
-            gradient: LinearGradient(
-
-              colors: [Color(0xFF4CAF50), Color(0xFF8BC34A)], // أخضر فاتح وداكن
-
-              begin: Alignment.topLeft,
-
-              end: Alignment.bottomRight,
-
-            ),
-
-          ),
-
-        ),
         centerTitle: true,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF4CAF50), Color(0xFF8BC34A)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [AppColors.primaryBlue.withOpacity(0.5), Colors.white],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        child: Padding(
-          padding: EdgeInsets.all(AppSizes.padding),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(height: 40.h),
-              CircleAvatar(
-                radius: 50.r,
-                backgroundColor: AppColors.accentGreen,
-                child: Icon(Icons.person, size: 60.w, color: Colors.white),
-              ).animate().scale(duration: 800.ms).fadeIn(),
-              SizedBox(height: 20.h),
-              Text(
-                userName,
-                style: TextStyle(
-                  fontSize: AppSizes.fontSizeTitle,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primaryBlue,
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          // User Info
+          Center(
+            child: Column(
+              children: [
+                const CircleAvatar(
+                  radius: 40,
+                  backgroundColor: Colors.blueGrey,
+                  child: Icon(Icons.person, size: 40, color: Colors.white),
                 ),
-              ).animate().fadeIn(duration: 800.ms),
-              SizedBox(height: 10.h),
-              Text(
-                'Total Activities: $totalActivities',
-                style: TextStyle(fontSize: AppSizes.fontSizeBody, color: AppColors.grey),
-              ).animate().fadeIn(duration: 900.ms),
-              SizedBox(height: 20.h),
-              Text(
-                'Badges',
-                style: TextStyle(
-                  fontSize: AppSizes.fontSizeTitle,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.accentGreen,
-                ),
-              ).animate().fadeIn(duration: 1000.ms),
-              SizedBox(height: 10.h),
-              Wrap(
-                spacing: 10.w,
-                runSpacing: 10.h,
-                children: badges.map((badge) {
-                  return Chip(
-                    label: Text(badge, style: TextStyle(fontSize: AppSizes.fontSizeBody - 2.sp)),
-                    backgroundColor: AppColors.primaryBlue.withOpacity(0.2),
-                  ).animate().scale(duration: 500.ms);
-                }).toList(),
-              ),
-            ],
+                const SizedBox(height: 12),
+                const Text("Khaled Elroby",
+                    style:
+                    TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                const Text("Eco Warrior 🌍"),
+              ],
+            ),
+          ).animate().fadeIn(duration: 500.ms),
+
+          const SizedBox(height: 20),
+
+          // Rewards & Stats Section
+          Card(
+            elevation: 4,
+            shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            child: ListTile(
+              leading: const Icon(Icons.stacked_bar_chart, color: Colors.indigo),
+              title: const Text("My Statistics"),
+              onTap: () {
+                // يفتح شاشة الـ Charts القديمة
+              },
+            ),
           ),
-        ),
+          Card(
+            elevation: 4,
+            shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            child: ListTile(
+              leading: const Icon(Icons.monetization_on,
+                  color: Colors.deepPurple),
+              title: const Text("My Rewards"),
+              onTap: () {
+                // يفتح شاشة المكافآت القديمة
+              },
+            ),
+          ),
+
+          const SizedBox(height: 20),
+
+          // Settings
+          const Text("Settings",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+
+          SwitchListTile(
+            value: true,
+            onChanged: (val) {},
+            title: const Text("Dark Mode"),
+            secondary: const Icon(Icons.dark_mode),
+          ),
+          ListTile(
+            leading: const Icon(Icons.language),
+            title: const Text("Change Language"),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: const Icon(Icons.logout, color: Colors.red),
+            title: const Text("Logout"),
+            onTap: () {},
+          ),
+        ],
       ),
     );
   }

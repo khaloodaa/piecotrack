@@ -1,4 +1,3 @@
-// walking_tracker_screen.dart
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
@@ -14,42 +13,69 @@ class WalkingTrackerScreen extends StatefulWidget {
 }
 
 class _WalkingTrackerScreenState extends State<WalkingTrackerScreen> {
-  double _totalDistance = 0;
+  double _totalDistance = 0.0; // meters
   int _stepsCount = 0;
   Position? _lastPosition;
-  late StreamSubscription<Position> _positionStream;
+  StreamSubscription<Position>? _positionStream;
+  bool _isTracking = false;
 
   @override
   void initState() {
     super.initState();
-    _startTracking();
+    // don't auto-start — let user press Start
   }
 
-  // Function to start tracking the user's location
-  void _startTracking() {
+  void _startTracking() async {
+    // Request permission if needed (especially on mobile)
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Location permission denied')));
+        return;
+      }
+    }
+
+    setState(() {
+      _isTracking = true;
+      _totalDistance = 0.0;
+      _stepsCount = 0;
+      _lastPosition = null;
+    });
+
     _positionStream = Geolocator.getPositionStream(
       locationSettings: const LocationSettings(
         accuracy: LocationAccuracy.bestForNavigation,
-        distanceFilter: 10, // Update location every 10 meters
+        distanceFilter: 5, // finer updates for better distance estimate
       ),
     ).listen((Position position) {
       _updateSteps(position);
     });
   }
 
-  // Function to calculate distance and convert it to steps
+  void _stopTrackingAndReturn() {
+    _positionStream?.cancel();
+    setState(() {
+      _isTracking = false;
+    });
+
+    // Return collected data to caller (AddActivityScreen)
+    Navigator.of(context).pop({
+      'steps': _stepsCount,
+      'distance': _totalDistance,
+    });
+  }
+
   void _updateSteps(Position newPosition) {
     if (_lastPosition != null) {
-      // Calculate current speed in km/h
       double speedKmH = newPosition.speed * 3.6;
 
-      // Check if the user's speed is within the walking range
       if (speedKmH > MAX_WALKING_SPEED_KMH) {
-        // If speed is too high, ignore the data
+        // ignore unrealistic movement (e.g., car)
+        _lastPosition = newPosition;
         return;
       }
 
-      // Calculate the distance between the last position and the new position
       double distance = Geolocator.distanceBetween(
         _lastPosition!.latitude,
         _lastPosition!.longitude,
@@ -59,36 +85,66 @@ class _WalkingTrackerScreenState extends State<WalkingTrackerScreen> {
 
       if (distance > 0) {
         _totalDistance += distance;
-        // Convert distance to steps (assuming a step is 0.76 meters)
-        _stepsCount = (_totalDistance / 0.76).round();
+        _stepsCount = (_totalDistance / 0.76).round(); // approximate step length ~0.76m
+        setState(() {});
       }
+    } else {
+      // first position set
+      setState(() {
+        _lastPosition = newPosition;
+      });
     }
+    // update last position
     _lastPosition = newPosition;
-    setState(() {});
   }
 
   @override
   void dispose() {
-    _positionStream.cancel(); // Stop tracking when leaving the page
+    _positionStream?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Step Tracker')),
-      body: Center(
+      appBar: AppBar(
+        title: const Text('Walking Tracker'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 20),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Your steps:', style: TextStyle(fontSize: 24)),
-            Text(
-              '$_stepsCount',
-              style: const TextStyle(fontSize: 60, fontWeight: FontWeight.bold),
-            ),
+            const Text('Track your walk', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 20),
-            Text('Distance: ${_totalDistance.toStringAsFixed(2)} meters'),
+            Text('Steps', style: TextStyle(color: Colors.grey[700])),
+            Text('$_stepsCount', style: const TextStyle(fontSize: 48, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 10),
+            Text('Distance: ${_totalDistance.toStringAsFixed(1)} m', style: const TextStyle(fontSize: 16)),
+            const SizedBox(height: 8),
             Text('Speed: ${_lastPosition != null ? (_lastPosition!.speed * 3.6).toStringAsFixed(2) : '0.00'} km/h'),
+            const Spacer(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: _isTracking ? null : _startTracking,
+                  child: const Text('Start'),
+                ),
+                ElevatedButton(
+                  onPressed: _isTracking ? _stopTrackingAndReturn : null,
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
+                  child: const Text('Finish'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    // cancel and return null so AddActivityScreen can reset
+                    _positionStream?.cancel();
+                    Navigator.of(context).pop(null);
+                  },
+                  child: const Text('Cancel'),
+                ),
+              ],
+            ),
           ],
         ),
       ),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:piecotrack/module/challenges_screen.dart';
+import 'package:piecotrack/module/community_screen.dart';
 import 'package:piecotrack/module/profile_screen.dart';
 
 import 'package:piecotrack/shared/component/contasnt.dart';
@@ -74,8 +76,10 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
   final List<Widget> _screens = [
     ActivityScreen(),
-    RewardsScreen(),
-    ReportScreen(),
+    ChallengesScreen(),
+    CommunityScreen(),
+    // RewardsScreen(),
+    // ReportScreen(),
     ProfileScreen()
   ];
 
@@ -90,8 +94,8 @@ class _HomeScreenState extends State<HomeScreen> {
         unselectedItemColor: AppColors.grey,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Activities'),
-          BottomNavigationBarItem(icon: Icon(Icons.currency_bitcoin), label: 'Rewards'),
-          BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: 'Report'),
+          BottomNavigationBarItem(icon: Icon(Icons.emoji_events), label: 'Challenges'),
+          BottomNavigationBarItem(icon: Icon(Icons.groups), label: 'Community'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'profile'),
         ],
       ).animate().scale(duration: 300.ms),
