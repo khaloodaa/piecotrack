@@ -64,6 +64,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
               showToast(text: _username!, state: ToastStates.success);
             });
             print('✅ Test Auth Success: $_username');
+            showToast(text: _username!, state: ToastStates.success);
           }),
           allowInterop((error) {
             print('❌ Test Auth Error: ${error['name']} - ${error['message']}');
