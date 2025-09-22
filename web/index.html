@@ -21,7 +21,6 @@
 <!-- Pi SDK -->
 <script src="https://sdk.minepi.com/pi-sdk.js"></script>
 
-
 <script>
   window.addEventListener('load', function() {
     if (typeof window.Pi !== 'undefined') {
@@ -29,9 +28,9 @@
 
       // 👇 هنا بنحط AppId والسندبوكس
       Pi.init({
-        version: "3.0",
+        version: "2.0",
         appId: "ecotrack-b612674e74f4c762", // ⬅️ استبدلها بالAppId من Pi Developer Portal
-        sandbox: true              // ⬅️ True لو عايز Sandbox Mode
+        sandbox: false               // ⬅️ True لو عايز Sandbox Mode
       });
 
     } else {
