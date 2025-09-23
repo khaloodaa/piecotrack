@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <base href="/">
+  <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
@@ -21,6 +21,8 @@
 <!-- Pi SDK -->
 <script src="https://sdk.minepi.com/pi-sdk.js"></script>
 
+<button id="test-pi-auth">Test Pi Auth</button>
+
 <script>
   window.addEventListener('load', function() {
     if (typeof window.Pi !== 'undefined') {
@@ -30,11 +32,29 @@
       Pi.init({
         version: "2.0",
         appId: "ecotrack-b612674e74f4c762", // ⬅️ استبدلها بالAppId من Pi Developer Portal
-        sandbox: true                       // ⬅️ True لو عايز Sandbox Mode
+        sandbox: true               // ⬅️ True لو عايز Sandbox Mode
       });
 
     } else {
       console.error('❌ Pi SDK is not loaded correctly.');
+    }
+  });
+
+  document.getElementById("test-pi-auth").addEventListener("click", function () {
+    if (window.Pi) {
+      Pi.authenticate(
+        ["username", "wallet_address"], // ✅ Scopes
+        function (authResult) {
+          console.log("Auth Success:", authResult);
+          alert("Auth Success: " + JSON.stringify(authResult));
+        },
+        function (error) {
+          console.error("Auth Error:", error);
+          alert("Auth Error: " + JSON.stringify(error));
+        }
+      );
+    } else {
+      alert("Pi SDK not loaded!");
     }
   });
 </script>

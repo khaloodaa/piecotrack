@@ -5,7 +5,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:js/js.dart';
-import 'package:piecotrack/shared/component/component.dart';
 
 import '../layout/cubit/cubit.dart';
 import '../layout/cubit/states.dart';
@@ -61,10 +60,8 @@ class _ActivityScreenState extends State<ActivityScreen> {
           allowInterop((authResult) {
             setState(() {
               _username = authResult['user']['username'];
-              showToast(text: _username!, state: ToastStates.success);
             });
             print('✅ Test Auth Success: $_username');
-            showToast(text: _username!, state: ToastStates.success);
           }),
           allowInterop((error) {
             print('❌ Test Auth Error: ${error['name']} - ${error['message']}');
@@ -128,7 +125,6 @@ class _ActivityScreenState extends State<ActivityScreen> {
                 ),
               ),
             ),
-
           Expanded(
             child: BlocBuilder<ActivityCubit, ActivityState>(
               builder: (context, state) {
@@ -219,8 +215,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () => Navigator.pushNamed(context, '/add_activity'
-        ),
+        onPressed: () => Navigator.pushNamed(context, '/add_activity'),
       ),
     );
   }
