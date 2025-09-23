@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="/piecotrack/">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="A new Flutter project.">
+
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="piecotrack">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>piecotrack</title>
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+<!-- Pi SDK -->
+<script src="https://sdk.minepi.com/pi-sdk.js"></script>
+
+<button id="test-pi-auth">Test Pi Auth</button>
+
+<script>
+  window.addEventListener('load', function() {
+    if (typeof window.Pi !== 'undefined') {
+      console.log('✅ Pi SDK loaded successfully.');
+
+      // 👇 هنا بنحط AppId والسندبوكس
+      Pi.init({
+        version: "2.0",
+        appId: "ecotrack-b612674e74f4c762", // ⬅️ استبدلها بالAppId من Pi Developer Portal
+        sandbox: true               // ⬅️ True لو عايز Sandbox Mode
+      });
+
+    } else {
+      console.error('❌ Pi SDK is not loaded correctly.');
+    }
+  });
+
+  document.getElementById("test-pi-auth").addEventListener("click", function () {
+    if (window.Pi) {
+      Pi.authenticate(
+        ["username", "wallet_address"], // ✅ Scopes
+        function (authResult) {
+          console.log("Auth Success:", authResult);
+          alert("Auth Success: " + JSON.stringify(authResult));
+        },
+        function (error) {
+          console.error("Auth Error:", error);
+          alert("Auth Error: " + JSON.stringify(error));
+        }
+      );
+    } else {
+      alert("Pi SDK not loaded!");
+    }
+  });
+</script>
+
+<script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
